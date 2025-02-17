@@ -3,10 +3,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 from selenium.webdriver.chrome.service import Service
+import requests
+from bs4 import BeautifulSoup
 
 driver = webdriver.Chrome(service=Service(executable_path="D:\webdriver\chromedriver-win64\chromedriver.exe"))
 
-def get_repo_names_from_target_name(target_name):
+def get_repo_names_from_target_name(target_name: str) -> list:
     # Set up the WebDriver
     # options = webdriver.ChromeOptions()
     # options.add_argument("--headless")  # Run in headless mode (optional)
@@ -14,19 +16,25 @@ def get_repo_names_from_target_name(target_name):
     driver.get("https://github.com/"+ target_name)
     temp = driver.find_element(By.TAG_NAME,"turbo-frame")
     temp = temp.find_element(By.CLASS_NAME,"position-relative")
-    #print(temp.find_element(By.CLASS_NAME,"mt-4"))
-    time.sleep(1)
-    temp.find_element(By.NAME,"button").click()
-    while True:
+    counter = 0
+    while counter < 24:
         try:
             time.sleep(1)
             temp.find_element(By.NAME,"button").click()
+            counter += 1
         except:
             break
-    driver.find_element(By.CLASS_NAME,"js-yearly-contributions")
+    l = []
+    soup = BeautifulSoup(temp.get_attribute("innerHTML"),"html.parser")
+    for link in soup.find_all("a"):
+        href = link.get("href")
+        text = link.get_text(strip=True)
+        
+        if href and text in href and text != "":
+            l.append(href)
+    return l
 
 def get_repo_readme(target_repo_urls : list) -> dict:
-    # driver = webdriver.Chrome(service=Service(executable_path="D:\webdriver\chromedriver-win64\chromedriver.exe"))
     dic = {}
     for i in target_repo_urls:
         driver.get(i)
@@ -39,5 +47,22 @@ def get_repo_readme(target_repo_urls : list) -> dict:
             print("No readme of url : "+ i)
     return dic
 
+def get_commits_from_repo_url(link_to_repo: str):
+    driver.get(link_to_repo)
+    time.sleep(2)
+    temp = driver.find_elements(By.TAG_NAME,"a")
+    for i in temp:
+        if i.get_attribute("class") == "prc-Button-ButtonBase-c50BI LinkButton-module__code-view-link-button--xvCGA flex-items-center fgColor-default":
+            driver.get(i.get_attribute("href"))
+            break
+    soup = BeautifulSoup(driver.page_source,"html.parser")
+    for i in soup.find_all("div",class_ = "Timeline__ToggleTimelineItem-sc-1nkzbnu-1 ehuczD Timeline-Item"):
+        for k in i.find_all("a",class_ = "prc-Link-Link-85e08"):
+            print(k.get("href"))
+    print("Next =================")
+    for i in soup.find_all("div",class_ = "Timeline__ToggleTimelineItem-sc-1nkzbnu-1 bTwOen Timeline-Item"):
+        for k in i.find_all("a",class_ = "prc-Link-Link-85e08"):
+            print(k.get("href"))
+    # print(soup.find_all("div",class_ = "Timeline__ToggleTimelineItem-sc-1nkzbnu-1 ehuczD Timeline-Item")[0].find("a",class_ = "prc-Link-Link-85e08").get("href"))
 
-get_repo_names_from_target_name("chanakya2006")
+get_commits_from_repo_url("https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile")

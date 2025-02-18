@@ -1,9 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 import time
 from selenium.webdriver.chrome.service import Service
-import requests
 from bs4 import BeautifulSoup
 
 class webscrape:
@@ -73,6 +71,13 @@ class webscrape:
 
         return dic
 
-#print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_repo_names_from_target_name("chanakya2006"))
-#print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_repo_readme(["https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile"]))
-#print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_commits_from_repo_url("https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile"))
+# Example usage
+
+"""
+from del__ import webscrape
+
+obj = webscrape("D:\webdriver\chromedriver-win64\chromedriver.exe")
+print(obj.get_repo_names_from_target_name("chanakya2006"))
+print(obj.get_repo_readme(["https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile"]))
+print(obj.get_commits_from_repo_url("https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile"))
+"""

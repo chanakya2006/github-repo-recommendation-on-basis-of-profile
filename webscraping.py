@@ -75,7 +75,7 @@ def get_commits_from_repo_url(link_to_repo: str):
                 else :
                     dic[k.get("href")] += 1
 
-    # error occurs at https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile/commits/main/ check on this repo
+    # error occurs at https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile check on this repo
     return dic
 
-get_commits_from_repo_url("https://github.com/DoingWoW/buildWow/commits/master/")
+get_commits_from_repo_url("https://github.com/DoingWoW/buildWow")

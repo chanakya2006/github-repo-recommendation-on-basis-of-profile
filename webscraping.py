@@ -73,7 +73,6 @@ class webscrape:
 
         return dic
 
-
-print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_repo_names_from_target_name("chanakya2006"))
-print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_repo_readme(["https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile"]))
-print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_commits_from_repo_url("https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile"))
+#print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_repo_names_from_target_name("chanakya2006"))
+#print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_repo_readme(["https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile"]))
+#print(webscrape(path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_commits_from_repo_url("https://github.com/chanakya2006/github-repo-recommendation-on-basis-of-profile"))

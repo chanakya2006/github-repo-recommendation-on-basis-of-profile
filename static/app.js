@@ -31,6 +31,12 @@ async function add_repo () {
     repos_container.innerHTML = empty_str;
 }
 
+input.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') { 
+        btn.click();  
+    }
+});
+
 btn.addEventListener('click', async () => {
     const input_val = input.value
     const search_result = await user(input_val)

@@ -4,6 +4,12 @@ const card = document.querySelector('.card')
 
 const repos_container = document.querySelector('.repos')
 
+document.querySelectorAll('.card p').forEach(card => {
+    card.addEventListener('click', function() {
+        this.classList.toggle('hover');
+    });
+});
+
 async function user (username) {
     const resp = await fetch(`https://api.github.com/users/${username}`)
     const respData = await resp.json()
@@ -72,3 +78,8 @@ btn.addEventListener('click', async () => {
         `
     }
 })
+
+
+
+
+  

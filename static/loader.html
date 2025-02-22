@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Button</title>
+    <style>
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn.loading {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .btn.loading::after {
+            content: "";
+            width: 15px;
+            height: 15px;
+            border: 3px solid white;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            position: absolute;
+            right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<button class="btn" id="myButton">Submit</button>
+
+<script>
+    document.getElementById("myButton").addEventListener("click", function() {
+        let button = this;
+        
+        // Add loading class
+        button.classList.add("loading");
+        button.innerText = "Loading...";
+
+        // Simulate a delay (e.g., API call)
+        setTimeout(() => {
+            button.classList.remove("loading");
+            button.innerText = "Submit";
+        }, 3000); // 3-second delay
+    });
+</script>
+
+</body>
+</html>

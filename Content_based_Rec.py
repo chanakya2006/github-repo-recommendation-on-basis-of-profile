@@ -75,7 +75,7 @@ class KeywordExtractor:
 class GitHubRecommender:
     def __init__(self, webdriver_path: str):
         """Initialize the recommender with webdriver path"""
-        self.scraper = webscrape("chromedriver.exe")
+        self.scraper = webscrape(webdriver_path)
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         }

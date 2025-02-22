@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, render_template, request
-from ClassfileforGitHubRecommendation import *
+from Content_based_Rec import GitHubRecommender
+
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -11,13 +13,11 @@ def home():
 def get_data():
     name = request.args.get("name"," ")
     response = {}
-    p = GitHubProjectRecommender().get_recommendations_for_user(name)
+    p = GitHubRecommender(webdriver_path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_recommendations_for_user(name)
     print(p)
-    for i in range(len(p)):
-        response[i] = {"repo_name": p[i]["url"].split("/")[-1], "url" : p[i]["url"], "Description" : p[i]["description"]}
-    # for i in range(5):
-    #     response[i] = {"repo_name" : name, "url" : f"https://github.com/{name}", "Description" : "Hello there !!"}
+    for k,i in enumerate(p):
+        response[k] = {"repo_name": "/".join(i.split("/")[-3:-1]), "url" : i, "Description" : p[i]}
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

@@ -399,16 +399,10 @@ class GitHubProjectRecommender:
         for idx, similarity in zip(top_indices, similarities[top_indices]):
             repo = candidate_repos[idx]
             recommendations.append({
-                'owner': repo['owner'],
-                'name': repo['name'],
+                
                 'description': repo['description'],
                 'url': repo['url'],
-                'languages': list(repo['languages'].keys()),
-                'topics': repo['topics'],
-                'similarity_score': float(similarity),
-                'stars': repo.get('stars', 0),
-                'forks': repo.get('forks', 0),
-                'from_database': True
+                
             })
         
         return recommendations
@@ -685,16 +679,10 @@ class GitHubProjectRecommender:
                 for idx, similarity in zip(top_indices, similarities[top_indices]):
                     repo = candidate_repos[idx]
                     all_recommendations.append({
-                        'owner': repo['owner'],
-                        'name': repo['name'],
+                        
                         'description': repo['description'],
                         'url': repo['url'],
-                        'languages': list(repo['languages'].keys()),
-                        'topics': repo['topics'],
-                        'similarity_score': float(similarity),
-                        'stars': repo.get('stars', 0),
-                        'forks': repo.get('forks', 0),
-                        'from_database': False
+                        
                     })
         
         # Return the recommendations, limiting to requested number
@@ -732,18 +720,18 @@ class GitHubProjectRecommender:
             
         return repos_removed, profiles_removed
     
-    load_database = GitHubProjectRecommender.load_database
-    save_database = GitHubProjectRecommender.save_database
-    extract_languages_from_readme = GitHubProjectRecommender.extract_languages_from_readme
-    extract_topics_from_readme = GitHubProjectRecommender.extract_topics_from_readme
-    scrape_repository = GitHubProjectRecommender.scrape_repository
-    _get_current_timestamp = GitHubProjectRecommender._get_current_timestamp
-    scrape_user_profile = GitHubProjectRecommender.scrape_user_profile
-    create_project_embedding = GitHubProjectRecommender.create_project_embedding
-    create_user_preference_embedding = GitHubProjectRecommender.create_user_preference_embedding
-    get_recommendations_from_database = GitHubProjectRecommender.get_recommendations_from_database
-    scrape_trending_repositories = GitHubProjectRecommender.scrape_trending_repositories
-    search_repositories = GitHubProjectRecommender.search_repositories
-    get_recommendations_for_topic = GitHubProjectRecommender.get_recommendations_for_topic
-    get_recommendations_for_user = GithubProjectRecommender.get_recommendations_for_user
-    clean_old_database_entries = GitHubProjectRecommender.clean_old_database_entries
+    # load_database = GitHubProjectRecommender.load_database
+    # save_database = GitHubProjectRecommender.save_database
+    # extract_languages_from_readme = GitHubProjectRecommender.extract_languages_from_readme
+    # extract_topics_from_readme = GitHubProjectRecommender.extract_topics_from_readme
+    # scrape_repository = GitHubProjectRecommender.scrape_repository
+    # _get_current_timestamp = GitHubProjectRecommender._get_current_timestamp
+    # scrape_user_profile = GitHubProjectRecommender.scrape_user_profile
+    # create_project_embedding = GitHubProjectRecommender.create_project_embedding
+    # create_user_preference_embedding = GitHubProjectRecommender.create_user_preference_embedding
+    # get_recommendations_from_database = GitHubProjectRecommender.get_recommendations_from_database
+    # scrape_trending_repositories = GitHubProjectRecommender.scrape_trending_repositories
+    # search_repositories = GitHubProjectRecommender.search_repositories
+    # get_recommendations_for_topic = GitHubProjectRecommender.get_recommendations_for_topic
+    # get_recommendations_for_user = GithubProjectRecommender.get_recommendations_for_user
+    # clean_old_database_entries = GitHubProjectRecommender.clean_old_database_entries

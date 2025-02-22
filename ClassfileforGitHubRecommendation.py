@@ -402,7 +402,7 @@ class GitHubProjectRecommender:
                 
                 'description': repo['description'],
                 'url': repo['url'],
-                
+                'topics': topics,
             })
         
         return recommendations
@@ -585,14 +585,12 @@ class GitHubProjectRecommender:
                 'url': repo['url'],
                 'languages': list(repo['languages'].keys()),
                 'topics': repo['topics'],
-                'similarity_score': float(similarity),
-                'stars': repo.get('stars', 0),
-                'forks': repo.get('forks', 0)
+                
             })
         
         return recommendations
             
-    def get_recommendations_for_user(self, username, max_recommendations=10, web_search_ratio=0.5):
+    def get_recommendations_for_user(self, username, max_recommendations=10, web_search_ratio=0.7):
         """
         Get project recommendations for a user based on their profile and repositories,
         with a specified ratio coming from database vs web search

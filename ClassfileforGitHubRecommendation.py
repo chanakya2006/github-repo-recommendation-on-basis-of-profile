@@ -735,3 +735,7 @@ class GitHubProjectRecommender:
     # get_recommendations_for_topic = GitHubProjectRecommender.get_recommendations_for_topic
     # get_recommendations_for_user = GithubProjectRecommender.get_recommendations_for_user
     # clean_old_database_entries = GitHubProjectRecommender.clean_old_database_entries
+
+
+obj = GitHubProjectRecommender()
+print(obj.get_recommendations_for_user("chanakya2006"))

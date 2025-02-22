@@ -11,7 +11,8 @@ class webscrape:
         options = webdriver.ChromeOptions()
         options.add_argument("--headless") 
         self.driver = webdriver.Chrome(service=Service(executable_path=path))#,options=options)
-    def get_repo_names_from_target_name(self,target_name: str) -> list:
+
+    def get_repo_names_from_target_name(self,target_name: str,limit = 1000) -> list:
         self.driver.get("https://github.com/"+ target_name)
         temp = self.driver.find_element(By.TAG_NAME,"turbo-frame")
         temp = temp.find_element(By.CLASS_NAME,"position-relative")
@@ -23,15 +24,18 @@ class webscrape:
                 counter += 1
             except:
                 break
-        l = []
+        l = set()
         soup = BeautifulSoup(temp.get_attribute("innerHTML"),"html.parser")
-        for link in soup.find_all("a"):
-            href = link.get("href")
-            text = link.get_text(strip=True)
+        for i,link in enumerate(soup.find_all("a")):
+            if i <= limit:
+                href = link.get("href")
+                text = link.get_text(strip=True)
         
-            if href and text in href and text != "":
-                l.append(href)
-        return l
+                if href and text in href and text != "":
+                    l.add(href)
+            else:
+                break
+        return list(l)
     def get_repo_readme(self,target_repo_urls : list) -> dict:
         dic = {}
         for i in target_repo_urls:

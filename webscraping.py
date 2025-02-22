@@ -109,7 +109,7 @@ class webscrape:
                     driver.get(url)
 
                     # Wait for content to load
-                    wait = WebDriverWait(driver, 15)
+                    wait = WebDriverWait(driver, 5)
                     repo_list = wait.until(
                         EC.presence_of_element_located((By.CLASS_NAME, "logged-out"))
                     )
@@ -138,7 +138,7 @@ class webscrape:
                     attempt += 1
                     if attempt < max_retries:
                         # If rate limited, wait longer and rotate user agent
-                        time.sleep(30 * attempt)  # Progressive waiting: 1min, 2min, 3min
+                        time.sleep(10 * attempt)  # Progressive waiting: 1min, 2min, 3min
                         driver.quit()
                         options.add_argument(f'user-agent={ua.random}')
                         driver = webdriver.Chrome(options=options)

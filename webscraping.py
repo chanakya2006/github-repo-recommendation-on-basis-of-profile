@@ -5,12 +5,19 @@ from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+import time
+import random
+from fake_useragent import UserAgent
 
 class webscrape:
     def __init__(self,path):
+        ua = UserAgent()
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless") 
-        self.driver = webdriver.Chrome(service=Service(executable_path=path))#,options=options)
+        #options.add_argument("--headless")
+        options.add_argument(f'user-agent={ua.random}')
+        self.path = path
+        self.driver = webdriver.Chrome(service=Service(executable_path=path),options=options)
 
     def get_repo_names_from_target_name(self,target_name: str,limit = 1000) -> list:
         self.driver.get("https://github.com/"+ target_name)
@@ -76,20 +83,78 @@ class webscrape:
                         dic[k.get("href")] += 1
 
         return dic
-    def search_result_from_query(self, query : str, recommend = 10) -> list:
-        if query == "C++" or query == "c++":
-            query = "C%2B%2B"
-        self.driver.get(f"https://github.com/search?q={query}&type=repositories")
-        sleep(2)
-        temp = self.driver.find_element(By.CLASS_NAME,"logged-out").find_element(By.CLASS_NAME,"application-main ").find_element(By.TAG_NAME,"main")
-        temp.find_element(By.CLASS_NAME,"gZKkEq")
-        l = []
-        for k,i in enumerate(temp.find_elements(By.CLASS_NAME,"iwUbcA")):
-            if k <= recommend:
-                l.append(i.find_element(By.CLASS_NAME,"kYLlPM").find_element(By.TAG_NAME,"a").get_attribute("href"))
-            else:
-                break
-        return l
+    def search_result_from_query(self, query : str, recommend=5, max_retries=3, base_delay=10) -> list:
+        ua = UserAgent()
+        options = webdriver.ChromeOptions()
+        options.add_argument(f'user-agent={ua.random}')
+        driver = webdriver.Chrome(service=Service(executable_path=self.path),options=options)
+
+        try:
+            repositories = []
+            attempt = 0
+
+            # Handle C++ query special case
+            if query.lower() == "c++":
+                query = "C%2B%2B"
+
+            while attempt < max_retries and len(repositories) < recommend:
+                try:
+                    # Add delay with randomization
+                    wait_time = base_delay * (2 ** attempt) + random.uniform(1, 5)
+                    print(f"Waiting {wait_time:.2f} seconds before request...")
+                    time.sleep(wait_time)
+
+                    # Make the request
+                    url = f"https://github.com/search?q={query}&type=repositories"
+                    driver.get(url)
+
+                    # Wait for content to load
+                    wait = WebDriverWait(driver, 15)
+                    repo_list = wait.until(
+                        EC.presence_of_element_located((By.CLASS_NAME, "logged-out"))
+                    )
+                    temp = driver.find_element(By.CLASS_NAME,"logged-out").find_element(By.CLASS_NAME,"application-main ").find_element(By.TAG_NAME,"main")
+                    temp.find_element(By.CLASS_NAME,"gZKkEq")
+                    for k,i in enumerate(temp.find_elements(By.CLASS_NAME,"iwUbcA")):
+                        if k <= recommend:
+                            repositories.append(i.find_element(By.CLASS_NAME,"kYLlPM").find_element(By.TAG_NAME,"a").get_attribute("href"))
+                        else:
+                            break
+                    # Find repository links
+                    # repo_elements = repo_list.find_elements(By.CSS_SELECTOR, "a[data-hydro-click]")
+
+                    # for repo in repo_elements:
+                    #     href = repo.get_attribute("href")
+                    #     if href and "/repository/" in href and href not in repositories:
+                    #         repositories.append(href)
+                    #         if len(repositories) >= recommend:
+                    #             break
+                            
+                    if repositories:  # If we found repositories, break the retry loop
+                        break
+
+                except TimeoutException:
+                    print(f"Timeout on attempt {attempt + 1}/{max_retries}. Possibly rate limited.")
+                    attempt += 1
+                    if attempt < max_retries:
+                        # If rate limited, wait longer and rotate user agent
+                        time.sleep(30 * attempt)  # Progressive waiting: 1min, 2min, 3min
+                        driver.quit()
+                        options.add_argument(f'user-agent={ua.random}')
+                        driver = webdriver.Chrome(options=options)
+
+                except Exception as e:
+                    print(f"Error on attempt {attempt + 1}/{max_retries}: {str(e)}")
+                    attempt += 1
+                    if attempt < max_retries:
+                        time.sleep(30)
+
+            return repositories[:recommend]  # Ensure we don't return more than requested
+
+        finally:
+            driver.quit()
+
+# Example usage
 
 # Example usage
 

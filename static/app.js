@@ -23,7 +23,7 @@ async function add_repo () {
     for (let item in reposData){
         console.log(reposData[item])
         empty_str += `<div class="card">
-                 <a href="${reposData[item].url}" target="_blank">Repository Name ></a>
+                 <h2><a href="${reposData[item].url}" target="_blank">${reposData[item].repo_name}</a></h2>
                  <h2>${reposData[item].repo_name}</h2>
          </div>`
     }

@@ -12,6 +12,12 @@ def home():
 @app.route('/api')
 def get_data():
     name = request.args.get("name"," ")
+    if name == "123":
+        response = {}
+        for i in range(10):
+            print(i)
+            response[i] = {"repo_name" : f"jai/mata/di{i}", "url" : "https://github.com/chanakya2006", "Description" : "jSHBfvouySHVubzdfiuyvgdzuyfbvuzdgfvuhdbfvouydbuydzbiuygbdubdufgbhsdbgfubbuyghbudgbuzdguzdhfboiuzdtobiutuby"}
+        return jsonify(response)
     response = {}
     p = GitHubRecommender(webdriver_path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_recommendations_for_user(name)
     print(p)
@@ -20,4 +26,4 @@ def get_data():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

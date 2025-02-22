@@ -100,7 +100,7 @@ class webscrape:
             while attempt < max_retries and len(repositories) < recommend:
                 try:
                     # Add delay with randomization
-                    wait_time = base_delay * (2 ** attempt) + random.uniform(1, 5)
+                    wait_time = base_delay * (1 ** attempt) + random.uniform(1, 5)
                     print(f"Waiting {wait_time:.2f} seconds before request...")
                     time.sleep(wait_time)
 
@@ -138,7 +138,7 @@ class webscrape:
                     attempt += 1
                     if attempt < max_retries:
                         # If rate limited, wait longer and rotate user agent
-                        time.sleep(10 * attempt)  # Progressive waiting: 1min, 2min, 3min
+                        time.sleep(5 * attempt)  # Progressive waiting: 1min, 2min, 3min
                         driver.quit()
                         options.add_argument(f'user-agent={ua.random}')
                         driver = webdriver.Chrome(options=options)
@@ -168,5 +168,5 @@ print(obj.get_commits_from_repo_url("https://github.com/chanakya2006/github-repo
 """
 
 if __name__ == "__main__":
-    obj = webscrape("D:\webdriver\chromedriver-win64\chromedriver.exe")
+    obj = webscrape("chromedriver.exe")
     print(obj.search_result_from_query("mkc"))

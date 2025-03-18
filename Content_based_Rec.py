@@ -92,7 +92,7 @@ class GitHubRecommender:
             para = ""
             for repo in user_repos:
                 repo_url = f"https://github.com/{repo}"
-                readme_dict = self.scraper.get_repo_readme([repo_url]) #############################################################
+                readme_dict = self.scraper.get_repo_readme([repo_url])
                 if readme_dict and repo_url in readme_dict:
                     readme_text = readme_dict[repo_url]
                     para += readme_text + "\n"
@@ -107,7 +107,7 @@ class GitHubRecommender:
             
             recommendations = []
             for interest in top_interests:
-                search_results = self.scraper.search_result_from_query( ############################################################
+                search_results = self.scraper.search_result_from_query(
                     interest, 
                     recommend=max_recommendations // len(top_interests),
                     max_retries=5

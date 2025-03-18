@@ -75,6 +75,7 @@ class KeywordExtractor:
 class GitHubRecommender:
     def __init__(self, webdriver_path: str):
         """Initialize the recommender with webdriver path"""
+        ###########################################################################################################################
         self.scraper = webscrape(webdriver_path)
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -84,14 +85,14 @@ class GitHubRecommender:
         """Get repository recommendations for a GitHub user"""
         try:
             
-            user_repos = self.scraper.get_repo_names_from_target_name(username, limit=max_repos)
+            user_repos = self.scraper.get_repo_names_from_target_name(username, limit=max_repos) ##################################
             
             
             user_interests = []
             para = ""
             for repo in user_repos:
                 repo_url = f"https://github.com/{repo}"
-                readme_dict = self.scraper.get_repo_readme([repo_url])
+                readme_dict = self.scraper.get_repo_readme([repo_url]) #############################################################
                 if readme_dict and repo_url in readme_dict:
                     readme_text = readme_dict[repo_url]
                     para += readme_text + "\n"
@@ -106,7 +107,7 @@ class GitHubRecommender:
             
             recommendations = []
             for interest in top_interests:
-                search_results = self.scraper.search_result_from_query(
+                search_results = self.scraper.search_result_from_query( ############################################################
                     interest, 
                     recommend=max_recommendations // len(top_interests),
                     max_retries=5
@@ -114,7 +115,7 @@ class GitHubRecommender:
                 recommendations.extend(search_results)
 
             
-            recommended_repos = self.scraper.get_repo_readme(recommendations)
+            recommended_repos = self.scraper.get_repo_readme(recommendations) ######################################################
             print(recommended_repos)
             
             cosine_values = {}

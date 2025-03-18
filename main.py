@@ -19,10 +19,11 @@ def get_data():
             response[i] = {"repo_name" : f"jai/mata/di{i}", "url" : "https://github.com/chanakya2006", "Description" : "jSHBfvouySHVubzdfiuyvgdzuyfbvuzdgfvuhdbfvouydbuydzbiuygbdubdufgbhsdbgfubbuyghbudgbuzdguzdhfboiuzdtobiutuby"}
         return jsonify(response)
     response = {}
-    p = GitHubRecommender(webdriver_path="D:\webdriver\chromedriver-win64\chromedriver.exe").get_recommendations_for_user(name)
+    p = GitHubRecommender().get_recommendations_for_user(name)
     print(p)
     for k,i in enumerate(p):
-        response[k] = {"repo_name": "/".join(i.split("/")[-3:-1]), "url" : i, "Description" : p[i]}
+        print(i)
+        response[k] = {"repo_name": "/".join(i.split("/")[len(i.split("/"))-2:len(i.split("/"))]), "url" : i, "Description": ""}#"Description" : p[i]}
     return jsonify(response)
 
 if __name__ == '__main__':

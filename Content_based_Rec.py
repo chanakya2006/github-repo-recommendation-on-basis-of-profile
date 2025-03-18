@@ -8,7 +8,8 @@ from bs4 import BeautifulSoup
 from collections import Counter
 from datetime import datetime, timedelta
 from typing import List, Dict, Set
-from webscraping import webscrape
+#from webscraping import webscrape
+from webscraping_2 import webscrape
 import re
 from sentence_transformers import SentenceTransformer
 from scipy.spatial.distance import cosine
@@ -73,33 +74,26 @@ class KeywordExtractor:
 
 
 class GitHubRecommender:
-    def __init__(self, webdriver_path: str):
-        """Initialize the recommender with webdriver path"""
-        ###########################################################################################################################
-        self.scraper = webscrape(webdriver_path)
-        self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-
     def get_recommendations_for_user(self, username: str, max_repos: int = 5, max_recommendations: int = 10):
         """Get repository recommendations for a GitHub user"""
         try:
             
-            user_repos = self.scraper.get_repo_names_from_target_name(username, limit=max_repos) ##################################
-            
+            user_repos = webscrape.get_repo_names_from_target_name(username) ##################################
             
             user_interests = []
             para = ""
             for repo in user_repos:
                 repo_url = f"https://github.com/{repo}"
-                readme_dict = self.scraper.get_repo_readme([repo_url])
+                readme_dict = webscrape.get_repo_readme([repo_url]) ###############################################################
                 if readme_dict and repo_url in readme_dict:
                     readme_text = readme_dict[repo_url]
                     para += readme_text + "\n"
                     languages = KeywordExtractor.extract_languages(readme_text)
                     topics = KeywordExtractor.extract_topics(readme_text)
                     user_interests.extend(languages + topics)
-
+            print(user_repos)
+            print(user_interests)
+            print(para)
            
             interest_counts = Counter(user_interests)
             top_interests = [item[0] for item in interest_counts.most_common(5)]
@@ -107,15 +101,15 @@ class GitHubRecommender:
             
             recommendations = []
             for interest in top_interests:
-                search_results = self.scraper.search_result_from_query(
+                ################################################################################################
+                search_results = webscrape.search_result_from_query(
                     interest, 
-                    recommend=max_recommendations // len(top_interests),
-                    max_retries=5
+                    max_recommendations=max_recommendations // len(top_interests)
                 )
                 recommendations.extend(search_results)
 
             
-            recommended_repos = self.scraper.get_repo_readme(recommendations) ######################################################
+            recommended_repos = webscrape.get_repo_readme(recommendations) ######################################################
             print(recommended_repos)
             
             cosine_values = {}
@@ -201,7 +195,7 @@ class GitHubRecommender:
 
 if __name__ == "__main__":
     
-    recommender = GitHubRecommender("chromedriver.exe")
+    recommender = GitHubRecommender()
     recommendations = recommender.get_recommendations_for_user("chanakya2006")
     print(recommendations)
-    print(json.dumps(recommendations, indent=2))
+    #print(json.dumps(recommendations, indent=2))

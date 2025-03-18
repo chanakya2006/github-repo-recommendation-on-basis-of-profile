@@ -169,4 +169,5 @@ print(obj.get_commits_from_repo_url("https://github.com/chanakya2006/github-repo
 
 if __name__ == "__main__":
     obj = webscrape("chromedriver.exe")
-    print(obj.search_result_from_query("mkc"))
+    #print(obj.search_result_from_query("mkc"))
+    print(obj.search_result_from_query("hello"))

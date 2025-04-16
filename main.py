@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 from Content_based_Rec import GitHubRecommender
 
+# To run : python main.py
 
 app = Flask(__name__)
 
@@ -12,12 +13,6 @@ def home():
 @app.route('/api')
 def get_data():
     name = request.args.get("name"," ")
-    if name == "123":
-        response = {}
-        for i in range(10):
-            print(i)
-            response[i] = {"repo_name" : f"jai/mata/di{i}", "url" : "https://github.com/chanakya2006", "Description" : "jSHBfvouySHVubzdfiuyvgdzuyfbvuzdgfvuhdbfvouydbuydzbiuygbdubdufgbhsdbgfubbuyghbudgbuzdguzdhfboiuzdtobiutuby"}
-        return jsonify(response)
     response = {}
     p = GitHubRecommender().get_recommendations_for_user(name)
     print(p)

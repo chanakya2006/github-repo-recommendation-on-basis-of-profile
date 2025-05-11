@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, render_template, request
 from Content_based_Rec import GitHubRecommender
+from flask_cors import CORS
 
 # To run : python main.py
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
